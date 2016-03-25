@@ -8,5 +8,6 @@ public class ShowMeTheEnergyBackendApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ShowMeTheEnergyBackendApplication.class, args);
+		System.out.println("run spring boot!");
 	}
 }
