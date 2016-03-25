@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'ENERTALK_OPEN_API_CLIENT_ID', EnertalkClientId
+        it.buildConfigField 'String', 'ENERTALK_OPEN_API_CLIENT_SECRET', EnertalkClientSecret
+    }
 }
 
 dependencies {
@@ -24,4 +28,18 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
+
+    //Butter Knife
+    compile 'com.jakewharton:butterknife:7.0.1'
+
+    //retrofit
+    def retrofitVersion = '2.0.0-beta3'
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
+
+    //okhttp
+    def okhttpVersion = '3.0.0-RC1'
+    compile "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 }
