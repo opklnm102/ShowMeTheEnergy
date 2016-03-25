@@ -10,4 +10,81 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="me.dong.showmetheenergy_android.SigninActivity">
 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_above="@+id/button2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/button2"
+        android:layout_alignEnd="@+id/button2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/password"
+        android:text="password"
+        android:layout_below="@+id/input_id"
+        android:layout_alignLeft="@+id/input_id"
+        android:layout_alignStart="@+id/input_id"
+        android:layout_marginTop="25dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/input_id"
+        android:layout_marginRight="27dp"
+        android:layout_marginEnd="27dp"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/plain1"
+        android:text="ID"
+        android:layout_alignTop="@+id/input_id"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/plain2"
+        android:text="PW"
+        android:layout_alignTop="@+id/password"
+        android:layout_alignLeft="@+id/plain1"
+        android:layout_alignStart="@+id/plain1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/plain1"
+        android:layout_alignStart="@+id/plain1"
+        android:layout_marginTop="44dp" />
+
 </RelativeLayout>
