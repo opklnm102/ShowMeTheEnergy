@@ -1,14 +1,10 @@
 package me.dong.showmetheenergy_android;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -17,7 +13,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.dong.showmetheenergy_android.model.Lank;
+import me.dong.showmetheenergy_android.model.Rank;
 import me.dong.showmetheenergy_android.network.BackendHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,19 +65,19 @@ public class LankActivity extends AppCompatActivity {
 
                 if(jaRoot != null){
 
-                    final ArrayList<Lank> lanks = new ArrayList<Lank>();
+                    final ArrayList<Rank> ranks = new ArrayList<Rank>();
 
                     for(int i=0; i<jaRoot.size(); i++){
-                        Lank lank = new Gson().fromJson(jaRoot.get(i), Lank.class);
-                        lanks.add(lank);
+                        Rank rank = new Gson().fromJson(jaRoot.get(i), Rank.class);
+                        ranks.add(rank);
                     }
 
-                    Log.d(TAG, " " + lanks);
+                    Log.d(TAG, " " + ranks);
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mLankAdapter.setData(lanks);
+                            mLankAdapter.setData(ranks);
                         }
                     });
                 }

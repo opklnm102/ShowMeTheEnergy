@@ -2,7 +2,6 @@ package me.dong.showmetheenergy_android;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import me.dong.showmetheenergy_android.model.Lank;
+import me.dong.showmetheenergy_android.model.Rank;
 
 /**
  * Created by Dong on 2016-03-26.
@@ -21,31 +20,31 @@ public class LankAdapter extends RecyclerView.Adapter<LankViewHolder> {
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
-    private ArrayList<Lank> mLankArrayList;
+    private ArrayList<Rank> mRankArrayList;
 
     public LankAdapter(Context context){
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
-        mLankArrayList = new ArrayList<>();
+        mRankArrayList = new ArrayList<>();
         setDummy();
     }
 
     public void setDummy(){
         for(int i=0; i<20; i++){
-            Lank lank = new Lank();
-            lank.setLank(i + 1);
-            lank.setUuid("hack.seoul01");
-            lank.setPoint(13232);
+            Rank rank = new Rank();
+            rank.setLank(i + 1);
+            rank.setUuid("hack.seoul01");
+            rank.setPoint(13232);
             if(i%2==0){
-                lank.setChange(1);
+                rank.setChange(1);
             }else if(i%3 == 0){
-                lank.setChange(-1);
+                rank.setChange(-1);
             }else{
-                lank.setChange(0);
+                rank.setChange(0);
             }
 
-            lank.setChangeRange(3);
-            mLankArrayList.add(lank);
+            rank.setChangeRange(3);
+            mRankArrayList.add(rank);
             notifyItemChanged(i);
         }
     }
@@ -60,16 +59,16 @@ public class LankAdapter extends RecyclerView.Adapter<LankViewHolder> {
     @Override
     public void onBindViewHolder(LankViewHolder holder, int position) {
 
-        Lank lank = mLankArrayList.get(position);
+        Rank rank = mRankArrayList.get(position);
 
-        holder.tvLank.setText(lank.getLank().toString());
-        holder.tvId.setText(lank.getUuid());
-        holder.tvPoint.setText(lank.getPoint().toString());
-        holder.tvChangeRange.setText(lank.getChangeRange().toString());
+        holder.tvLank.setText(rank.getLank().toString());
+        holder.tvId.setText(rank.getUuid());
+        holder.tvPoint.setText(rank.getPoint().toString());
+        holder.tvChangeRange.setText(rank.getChangeRange().toString());
 
-        if(lank.getChange() == 1){
+        if(rank.getChange() == 1){
             holder.ivChange.setImageResource(R.drawable.ic_green_arrow);
-        }else if(lank.getChange() == 0){
+        }else if(rank.getChange() == 0){
             holder.ivChange.setVisibility(View.INVISIBLE);
         }else{
             holder.ivChange.setImageResource(R.drawable.ic_red_arrow);
@@ -78,30 +77,30 @@ public class LankAdapter extends RecyclerView.Adapter<LankViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mLankArrayList.size();
+        return mRankArrayList.size();
     }
 
-    public void setData(ArrayList<Lank> datas){
+    public void setData(ArrayList<Rank> datas){
 
-        mLankArrayList = new ArrayList<>();
+        mRankArrayList = new ArrayList<>();
 
         for(int i=0; i<datas.size(); i++){
-            Lank lank = datas.get(i);
-            lank.setLank(i + 1);
+            Rank rank = datas.get(i);
+            rank.setLank(i + 1);
             int flag = i%3;
             if(flag == 0){
-                lank.setChange(1);
+                rank.setChange(1);
             }else if(flag == 1){
-                lank.setChange(-1);
+                rank.setChange(-1);
             }else{
-                lank.setChange(0);
+                rank.setChange(0);
             }
 
-            lank.setChangeRange(i%3);
+            rank.setChangeRange(i%3);
 
-            Log.d(TAG, " " + lank);
+            Log.d(TAG, " " + rank);
 
-            mLankArrayList.add(lank);
+            mRankArrayList.add(rank);
         }
         notifyDataSetChanged();
     }

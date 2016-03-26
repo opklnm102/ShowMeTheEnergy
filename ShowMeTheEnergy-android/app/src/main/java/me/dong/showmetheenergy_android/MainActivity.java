@@ -4,12 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.rebound.SimpleSpringListener;
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -36,8 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
     protected static SharedPreferences preferences;
 
-    @Bind(R.id.imageView_lank_show)
-    ImageView ivLankShow;
+    private ReboundProvider mReboundProvider;
+    private Spring mScaleSpring;
+    private final RankShowSpringListener mSpringListener = new RankShowSpringListener();
+
+    @Bind(R.id.imageView_rank_show)
+    ImageView ivRankShow;
 
     @Bind(R.id.textView_month_Usage_before)
     TextView tvMonthUsageBefore;
@@ -55,11 +64,17 @@ public class MainActivity extends AppCompatActivity {
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
+        if (mReboundProvider == null) {
+            mReboundProvider = ReboundProvider.getInstance();
+        }
+
+        mScaleSpring = mReboundProvider.getNewSpring();
+
         if (sEnertalkHomeApiHelper == null) {
             sEnertalkHomeApiHelper = EnertalkHomeApiHelper.getInstance();
         }
 
-        if(sBackendHelper == null){
+        if (sBackendHelper == null) {
             sBackendHelper = BackendHelper.getInstance();
         }
 
@@ -67,11 +82,39 @@ public class MainActivity extends AppCompatActivity {
             preferences = getSharedPreferences(Define.PREFERENCE_NAME, Context.MODE_PRIVATE);
         }
 
-        ivLankShow.setOnClickListener(new View.OnClickListener() {
+//        ivRankShow.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, LankActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+        ivRankShow.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LankActivity.class);
-                startActivity(intent);
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // When pressed start solving the spring to 1.
+                        mScaleSpring.setEndValue(1);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        // When released start solving the spring to 0.
+                        mScaleSpring.setEndValue(0);
+
+                        new Handler(getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(MainActivity.this, LankActivity.class);
+                                startActivity(intent);
+                            }
+                        }, 2000);
+
+                        break;
+                }
+                return true;
             }
         });
     }
@@ -88,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        mScaleSpring.addListener(mSpringListener);
 
         getDevicePeriodic();
     }
@@ -142,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void postMonthUsage(List<MonthUsage> datas){
+    public void postMonthUsage(List<MonthUsage> datas) {
 
         String uuid = preferences.getString(Define.UUID, "empty");
 
@@ -151,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response<JsonObject> response) {
                 Log.d(TAG, " postMonthUsage: " + response.body());
-
             }
 
             @Override
@@ -159,6 +203,23 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, " Throwable is " + t);
             }
         });
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mScaleSpring.removeListener(mSpringListener);
+    }
+
+    private class RankShowSpringListener extends SimpleSpringListener {
+
+        @Override
+        public void onSpringUpdate(Spring spring) {
+            super.onSpringUpdate(spring);
+
+            float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
+            ivRankShow.setScaleX(mappedValue);
+            ivRankShow.setScaleY(mappedValue);
+        }
     }
 }

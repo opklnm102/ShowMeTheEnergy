@@ -3,7 +3,7 @@ package me.dong.showmetheenergy_android.model;
 /**
  * Created by Dong on 2016-03-26.
  */
-public class Lank {
+public class Rank {
 
     Integer lank;
     String uuid;
