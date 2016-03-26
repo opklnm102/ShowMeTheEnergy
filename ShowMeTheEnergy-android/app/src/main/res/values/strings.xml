@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShowMeTheEnergy-android</string>
+    <string name="app_name">ShowMe the Energy</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_signin">SigninActivity</string>
     <string name="title_activity_lank">LankActivity</string>

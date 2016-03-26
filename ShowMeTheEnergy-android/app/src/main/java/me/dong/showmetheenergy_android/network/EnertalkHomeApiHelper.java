@@ -1,7 +1,11 @@
 package me.dong.showmetheenergy_android.network;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import java.util.List;
+
+import me.dong.showmetheenergy_android.model.MonthUsage;
 import me.dong.showmetheenergy_android.util.Define;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -35,9 +39,12 @@ public class EnertalkHomeApiHelper {
     }
 
     private EnertalkHomeApiHelper() {
+
+
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Define.HOME_DOMAIN)
                 .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Define.HOME_DOMAIN)
                 .client(mOkHttpClient)
                 .build();
 
@@ -51,5 +58,15 @@ public class EnertalkHomeApiHelper {
                 1458864169000L,
                 1458950569000L
                 );
+//        return service.getDevicePeriodic(Define.HOME_DOMAIN
+//        );
     }
+
+//    public Call<JsonArray> getMonthUsage() {
+//        return service.getMonthUsage();
+//    }
+//
+//    public Call<JsonObject> postMonthUsage(String uuid, List<MonthUsage> datas) {
+//        return service.postMonthUsage(uuid, datas);
+//    }
 }

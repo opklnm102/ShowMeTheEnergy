@@ -4,26 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.dong.showmetheenergy_android.model.DevicePeriodicData;
+import me.dong.showmetheenergy_android.model.MonthUsage;
+import me.dong.showmetheenergy_android.network.BackendHelper;
 import me.dong.showmetheenergy_android.network.EnertalkHomeApiHelper;
 import me.dong.showmetheenergy_android.util.Define;
 import retrofit2.Call;
@@ -34,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    protected static EnertalkHomeApiHelper mEnertalkHomeApiHelper;
+    protected static EnertalkHomeApiHelper sEnertalkHomeApiHelper;
+    protected static BackendHelper sBackendHelper;
 
     protected static SharedPreferences preferences;
 
@@ -57,8 +55,12 @@ public class MainActivity extends AppCompatActivity {
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
-        if (mEnertalkHomeApiHelper == null) {
-            mEnertalkHomeApiHelper = EnertalkHomeApiHelper.getInstance();
+        if (sEnertalkHomeApiHelper == null) {
+            sEnertalkHomeApiHelper = EnertalkHomeApiHelper.getInstance();
+        }
+
+        if(sBackendHelper == null){
+            sBackendHelper = BackendHelper.getInstance();
         }
 
         if (preferences == null) {
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setMonthUsage(DevicePeriodicData beforeData, DevicePeriodicData CurrentData) {
+    public void setMonthUsage(MonthUsage beforeData, MonthUsage CurrentData) {
 
         Double beforeUsage = beforeData.getUnitPeriodUsage().doubleValue() / 1000000;
         Double currentUsage = CurrentData.getUnitPeriodUsage().doubleValue() / 1000000;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, " " + accessToken + " " + uuid);
 
-        Call<JsonArray> call = mEnertalkHomeApiHelper.getDevicePeriodic(accessToken, uuid);
+        Call<JsonArray> call = sEnertalkHomeApiHelper.getDevicePeriodic(accessToken, uuid);
         call.enqueue(new Callback<JsonArray>() {
 
             @Override
@@ -108,17 +110,19 @@ public class MainActivity extends AppCompatActivity {
 
                 if (jaRoot != null) {
                     int size = jaRoot.size();
-                    ArrayList<DevicePeriodicData> dataArrayList = new ArrayList<DevicePeriodicData>();
+                    ArrayList<MonthUsage> dataArrayList = new ArrayList<MonthUsage>();
 
                     for (int i = 0; i < size; i++) {
-                        DevicePeriodicData data = new Gson().fromJson(jaRoot.get(i), DevicePeriodicData.class);
+                        MonthUsage data = new Gson().fromJson(jaRoot.get(i), MonthUsage.class);
                         dataArrayList.add(data);
                     }
 
+                    postMonthUsage(dataArrayList);
+
                     Log.d(TAG, " " + dataArrayList);
 
-                    final DevicePeriodicData beforeData = dataArrayList.get(size - 2);
-                    final DevicePeriodicData CurrentData = dataArrayList.get(size - 1);
+                    final MonthUsage beforeData = dataArrayList.get(size - 2);
+                    final MonthUsage CurrentData = dataArrayList.get(size - 1);
 
                     Log.d(TAG, " " + beforeData + " " + CurrentData);
 
@@ -136,5 +140,25 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, " Throwable is " + t);
             }
         });
+    }
+
+    public void postMonthUsage(List<MonthUsage> datas){
+
+        String uuid = preferences.getString(Define.UUID, "empty");
+
+        Call<JsonObject> call = sBackendHelper.postMonthUsage(uuid, datas);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Response<JsonObject> response) {
+                Log.d(TAG, " postMonthUsage: " + response.body());
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, " Throwable is " + t);
+            }
+        });
+
     }
 }

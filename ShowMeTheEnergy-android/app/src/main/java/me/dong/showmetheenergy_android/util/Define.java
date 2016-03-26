@@ -17,6 +17,8 @@ public class Define {
 //    public static final String HOME_DOMAIN = "https://api.encoredtech.com:8082/1.2";
 
     public static final String HOME_DOMAIN = "https://api.encoredtech.com/1.2/";
+    public static final String LANKING_DOMAIN = "http://52.34.93.99:8080/";
+
     public static final String CARD_DOMAIN = "https://enertalk-card.encoredtech.com";
 
     public static AuthInfo AUTH_INFO = null;

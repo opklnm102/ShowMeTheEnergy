@@ -3,7 +3,7 @@ package me.dong.showmetheenergy_android.model;
 /**
  * Created by Dong on 2016-03-26.
  */
-public class DevicePeriodicData {
+public class MonthUsage {
 
     Long timestamp;  //start timestamp (ms)
     Long unitPeriodUsage;  //electricity usages in this period (mWh)

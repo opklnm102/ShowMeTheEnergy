@@ -3,6 +3,7 @@ package me.dong.showmetheenergy_android;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import me.dong.showmetheenergy_android.model.Lank;
  * Created by Dong on 2016-03-26.
  */
 public class LankAdapter extends RecyclerView.Adapter<LankViewHolder> {
+
+    public static final String TAG = LankAdapter.class.getSimpleName();
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -31,7 +34,7 @@ public class LankAdapter extends RecyclerView.Adapter<LankViewHolder> {
         for(int i=0; i<20; i++){
             Lank lank = new Lank();
             lank.setLank(i + 1);
-            lank.setId("hack.seoul01");
+            lank.setUuid("hack.seoul01");
             lank.setPoint(13232);
             if(i%2==0){
                 lank.setChange(1);
@@ -60,7 +63,7 @@ public class LankAdapter extends RecyclerView.Adapter<LankViewHolder> {
         Lank lank = mLankArrayList.get(position);
 
         holder.tvLank.setText(lank.getLank().toString());
-        holder.tvId.setText(lank.getId());
+        holder.tvId.setText(lank.getUuid());
         holder.tvPoint.setText(lank.getPoint().toString());
         holder.tvChangeRange.setText(lank.getChangeRange().toString());
 
@@ -76,5 +79,30 @@ public class LankAdapter extends RecyclerView.Adapter<LankViewHolder> {
     @Override
     public int getItemCount() {
         return mLankArrayList.size();
+    }
+
+    public void setData(ArrayList<Lank> datas){
+
+        mLankArrayList = new ArrayList<>();
+
+        for(int i=0; i<datas.size(); i++){
+            Lank lank = datas.get(i);
+            lank.setLank(i + 1);
+            int flag = i%3;
+            if(flag == 0){
+                lank.setChange(1);
+            }else if(flag == 1){
+                lank.setChange(-1);
+            }else{
+                lank.setChange(0);
+            }
+
+            lank.setChangeRange(i%3);
+
+            Log.d(TAG, " " + lank);
+
+            mLankArrayList.add(lank);
+        }
+        notifyDataSetChanged();
     }
 }

@@ -6,7 +6,7 @@ package me.dong.showmetheenergy_android.model;
 public class Lank {
 
     Integer lank;
-    String id;
+    String uuid;
     Integer point;
     Integer change;  //1:up, 0:그대로, -1:down
     Integer changeRange;
@@ -19,12 +19,12 @@ public class Lank {
         this.lank = lank;
     }
 
-    public String getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public Integer getPoint() {
@@ -49,5 +49,16 @@ public class Lank {
 
     public void setChangeRange(Integer changeRange) {
         this.changeRange = changeRange;
+    }
+
+    @Override
+    public String toString() {
+        return "Lank{" +
+                "lank=" + lank +
+                ", uuid='" + uuid + '\'' +
+                ", point=" + point +
+                ", change=" + change +
+                ", changeRange=" + changeRange +
+                '}';
     }
 }
